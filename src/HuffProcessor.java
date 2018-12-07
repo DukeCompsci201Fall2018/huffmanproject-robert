@@ -98,7 +98,7 @@ public class HuffProcessor {
 				if (bits == 0) { 
 					current = current.myLeft;
 				}
-				else {
+				else if(bits == 1) {
 					current = current.myRight;
 				}
 				if (current.myLeft == null && current.myRight == null) {
@@ -106,7 +106,7 @@ public class HuffProcessor {
 						break;
 					}
 					else {
-						out.writeBits(bits, current.myValue);
+						out.writeBits(1, current.myValue);
 						current = root;
 					}
 				}
