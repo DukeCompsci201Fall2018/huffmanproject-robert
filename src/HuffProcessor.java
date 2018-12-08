@@ -55,8 +55,15 @@ public class HuffProcessor {
 		writeCompressedBits(codings, in, out);
 		out.close();
 	}
-	
-	public void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
+	/**
+	 * 
+	 * @param codings
+	 * @param in
+	 * 	 Buffered bit stream of the file to be compressed
+	 * @param out
+	 * 	Buffered bit stream writing to the output file.
+	 */
+	private void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
 		boolean def = true;
 		while (def) {
 			int bits = in.readBits(BITS_PER_WORD);
@@ -82,7 +89,7 @@ public class HuffProcessor {
 	 * 	a string array of ALPH_sIZE + 1 lenght
 	 */
 	
-	public int[] readForCounts(BitInputStream in) {
+	private int[] readForCounts(BitInputStream in) {
 		int[] freq = new int[ALPH_SIZE + 1];
 		boolean def = true;
 		while(def) {
@@ -103,7 +110,7 @@ public class HuffProcessor {
 	 * @return
 	 * 	a huffnode with the vlaues within in freq
 	 */
-	public HuffNode makeTreeFromCounts(int[] freq) {
+	private HuffNode makeTreeFromCounts(int[] freq) {
 		PriorityQueue<HuffNode> pq = new PriorityQueue<>();
 
 
@@ -133,7 +140,7 @@ public class HuffProcessor {
 	 * @return
 	 * 	a string array that holds the pats for the different leafs
 	 */
-	public String[] makeCodingsFromTree(HuffNode root) {
+	private String[] makeCodingsFromTree(HuffNode root) {
 		String[] encodings = new String[ALPH_SIZE + 1];
 	    codingHelper(root,"",encodings);
 
@@ -149,7 +156,7 @@ public class HuffProcessor {
 	 * @param encodings
 	 * 	A string array that holds all the paths
 	 */
-	public void codingHelper(HuffNode root, String path, String[] encodings) {
+	private void codingHelper(HuffNode root, String path, String[] encodings) {
 		if(root.myLeft == null && root.myRight == null) {
 			encodings[root.myValue] = path;
 			return;
@@ -174,7 +181,7 @@ public class HuffProcessor {
 	 * @param out
 	 * 	Buffered bit stream of the file to be compressed
 	 */
-	public void writeHeader(HuffNode root, BitOutputStream out) {
+	private void writeHeader(HuffNode root, BitOutputStream out) {
 		if (root.myLeft != null || root.myRight != null) {
 			out.writeBits(1, 0);
 			writeHeader(root.myLeft, out);
